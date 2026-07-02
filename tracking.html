@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracking Pesanan — Lifa Flora</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    .track-page {
+      min-height: 100vh;
+      background: var(--pink-bg);
+      padding: 6rem 1rem 3rem;
+    }
+
+    .track-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .track-heading {
+      margin-bottom: 2rem;
+    }
+
+    .track-heading .section-tag {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pink-deep);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .track-heading h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--text-dark);
+    }
+
+    .track-heading p {
+      color: var(--text-light);
+      font-size: 0.92rem;
+      margin-top: 0.35rem;
+    }
+
+    /* Grid kartu pesanan */
+    .track-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* Kartu pesanan */
+    .track-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      transition: var(--transition);
+    }
+
+    .track-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .track-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .track-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .track-status {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+
+    .track-date {
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    .track-items {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.5;
+      border-top: 1px dashed var(--border);
+      border-bottom: 1px dashed var(--border);
+      padding: 0.6rem 0;
+    }
+
+    .track-total {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+    }
+
+    .track-total strong {
+      color: var(--pink-deep);
+    }
+
+    /* Timeline status */
+    .track-timeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 0.25rem 0;
+    }
+
+    .track-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      flex: 1;
+      position: relative;
+    }
+
+    .track-step-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      z-index: 1;
+      transition: var(--transition);
+    }
+
+    .track-step-dot.done {
+      background: var(--pink-deep);
+      border-color: var(--pink-deep);
+      color: white;
+    }
+
+    .track-step-dot.active {
+      background: var(--pink-light);
+      border-color: var(--pink-deep);
+      color: var(--pink-deep);
+    }
+
+    .track-step-label {
+      font-size: 0.68rem;
+      color: var(--text-light);
+      text-align: center;
+    }
+
+    .track-step-label.done,
+    .track-step-label.active {
+      color: var(--pink-deep);
+      font-weight: 600;
+    }
+
+    .track-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin-bottom: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .track-line.done {
+      background: var(--pink-deep);
+    }
+
+    /* Tombol update */
+    .track-update-btn {
+      width: 100%;
+      padding: 0.65rem;
+      background: var(--pink-deep);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-full);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+
+    .track-update-btn:hover:not(:disabled) {
+      background: #d4617a;
+      transform: translateY(-1px);
+    }
+
+    .track-update-btn:disabled {
+      background: var(--green-deep);
+      cursor: default;
+    }
+
+    /* Empty state */
+    .track-empty {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-light);
+      display: none;
+    }
+
+    .track-empty span {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .track-empty p {
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .track-empty-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--pink-deep);
+      color: var(--white);
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .track-empty-btn:hover {
+      background: #d4617a;
+    }
+
+    /* Login reminder */
+    .track-login-note {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .track-login-note a {
+      color: var(--pink-deep);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .track-login-note a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">🌸</span>
+        <span class="logo-text">Lifa <em>Flora</em></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="index.html#products" class="nav-link">Produk</a></li>
+        <li><a href="index.html#contact" class="nav-link">Kontak</a></li>
+        <li><a href="tracking.html" class="nav-link active">Pesanan</a></li>
+        <li id="navLoginItem"><a href="login.html" class="nav-link">Login</a></li>
+        <li id="navUserItem" style="display:none;align-items:center;gap:0.5rem;">
+          <a href="profile.html" class="nav-link" id="navUserName">👤 Akun</a>
+          <button class="nav-link nav-logout-btn" onclick="logoutUser()" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;color:inherit;padding:0.4rem 0.75rem;">Keluar</button>
+        </li>
+      </ul>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===================== TRACKING PAGE ===================== -->
+  <main class="track-page">
+    <div class="track-container">
+
+      <div class="track-heading">
+        <span class="section-tag">Riwayat Belanja</span>
+        <h1>Tracking Pesanan</h1>
+        <p>Pantau status pesanan buketmu di sini</p>
+      </div>
+
+      <!-- Catatan login -->
+      <div class="track-login-note" id="trackLoginNote" style="display:none;">
+        💡 <span><a href="login.html">Login</a> agar pesananmu tersimpan dan bisa dipantau kapan saja.</span>
+      </div>
+
+      <!-- Empty state -->
+      <div class="track-empty" id="trackEmpty">
+        <span>📦</span>
+        <p>Belum ada pesanan.<br/>Yuk pilih buket cantik dulu!</p>
+        <a href="index.html#products" class="track-empty-btn">
+          🌸 Lihat Koleksi
+        </a>
+      </div>
+
+      <!-- Grid pesanan — diisi JS -->
+      <div class="track-grid" id="trackGrid"></div>
+
+    </div>
+  </main>
+  
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+  <script>
+    lucide.createIcons();
+    loadState();
+    updateNavAuth();
+
+    // Tampilkan catatan login jika belum login
+    if (!getSession()) {
+      document.getElementById('trackLoginNote').style.display = 'flex';
+    }
+
+    initTrackingPage();
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+  </script>
+  <script>initCSWidget();</script>
+  <!-- Tombol CS WhatsApp Floating -->
+  <a href="https://api.whatsapp.com/send?phone=6287710793723&text=Halo%20Lifa%20Flora%2C%20saya%20ingin%20bertanya%20tentang%20produk" target="_blank" class="cs-float-btn" title="Chat CS via WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.127 1.526 5.87L0 24l6.293-1.497A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.502-5.2-1.378l-.374-.217-3.736.889.924-3.638-.243-.389A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  </a>
+</body>
+</html>
